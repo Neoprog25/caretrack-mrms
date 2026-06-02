@@ -185,6 +185,18 @@ async function getShifokorSchedule(req, res) {
     if (!shifokorId || !shifokorTuri || !sana)
       return sendError(res, 'shifokorId, shifokorTuri va sana kerak', 400);
 
+    // Shifokor smena ma'lumotini olish
+    const mahalliy  = readJSON('mahalliy_shifokorlar.json').mahalliy_shifokorlar;
+    const tor       = readJSON('tor_shifokorlar.json').tor_shifokorlar;
+    const doktorlar = shifokorTuri === 'mahalliy_shifokor' ? mahalliy : tor;
+    const doktor    = doktorlar.find(d => d.id === parseInt(shifokorId));
+
+    const smena   = doktor?.ish_smenasi    || 'kunduz';
+    const ishBosh = doktor?.ish_boshlanish || '09:00';
+    const ishTug  = doktor?.ish_tugash     || '17:00';
+    const boshH   = parseInt(ishBosh.split(':')[0]);
+    const tugH    = parseInt(ishTug.split(':')[0]);
+
     const { appointments } = readJSON('appointments.json');
     const bandVaqtlar = appointments
       .filter(a =>
@@ -193,24 +205,43 @@ async function getShifokorSchedule(req, res) {
         a.sana === sana && a.holati !== 'Bekor qilindi'
       ).map(a => a.vaqt);
 
-    // 9:00 – 17:00, har 30 daqiqa, tushlik skip
     const barcha = [];
-    for (let h = 9; h < 17; h++) {
-      for (const m of ['00', '30']) {
-        const vaqt = `${String(h).padStart(2,'0')}:${m}`;
-        const holat = slotHolati(sana, vaqt);
-        if (holat === 'tushlik') {
-          barcha.push({ vaqt, band: true, tushlik: true, otgan: false });
-        } else if (holat === 'otgan') {
-          barcha.push({ vaqt, band: true, tushlik: false, otgan: true });
-        } else {
-          barcha.push({ vaqt, band: bandVaqtlar.includes(vaqt), tushlik: false, otgan: false });
+
+    const addSlot = (vaqt, isKecha = false) => {
+      const holat = slotHolati(sana, vaqt);
+      if (!isKecha && holat === 'tushlik') {
+        barcha.push({ vaqt, band: true, tushlik: true, otgan: false });
+      } else if (holat === 'otgan') {
+        barcha.push({ vaqt, band: true, tushlik: false, otgan: true });
+      } else {
+        barcha.push({ vaqt, band: bandVaqtlar.includes(vaqt), tushlik: false, otgan: false });
+      }
+    };
+
+    if (smena === 'kecha') {
+      // 17:00 – 24:00
+      for (let h = boshH; h < 24; h++) {
+        for (const m of ['00', '30']) {
+          addSlot(`${String(h).padStart(2,'0')}:${m}`, true);
+        }
+      }
+      // 00:00 – tugH
+      for (let h = 0; h < tugH; h++) {
+        for (const m of ['00', '30']) {
+          addSlot(`${String(h).padStart(2,'0')}:${m}`, true);
+        }
+      }
+    } else {
+      for (let h = boshH; h < tugH; h++) {
+        for (const m of ['00', '30']) {
+          addSlot(`${String(h).padStart(2,'0')}:${m}`, false);
         }
       }
     }
-    const bos   = barcha.filter(v => !v.band).length;
-    const band  = barcha.filter(v => v.band && !v.tushlik && !v.otgan).length;
-    sendSuccess(res, { sana, barcha, jami: barcha.length, band, bos });
+
+    const bos  = barcha.filter(v => !v.band).length;
+    const band = barcha.filter(v => v.band && !v.tushlik && !v.otgan).length;
+    sendSuccess(res, { sana, smena, ishBosh, ishTug, barcha, jami: barcha.length, band, bos });
   } catch(e) { sendError(res, e.message, 500); }
 }
 
