@@ -1,0 +1,16 @@
+{
+  "name": "caretrack-mrms",
+  "version": "1.0.0",
+  "description": "CareTrack Medical Records Management System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

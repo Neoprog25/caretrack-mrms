@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareTrack MRMS — Kirish</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="login-page">
+  <div class="login-container">
+    <div style="position:absolute;top:16px;right:16px">
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Mavzu o'zgartirish" style="background:rgba(255,255,255,.15)">🌙</button>
+    </div>
+    <div class="login-logo">
+      <div class="login-logo-icon"><i class="ti ti-heart-plus" style="font-size:28px"></i></div>
+      <h1>CareTrack MRMS</h1>
+      <p>Tibbiy Yozuvlarni Boshqarish Tizimi</p>
+    </div>
+
+    <!-- LOGIN FORMA -->
+    <div id="loginSection">
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label>Foydalanuvchi nomi</label>
+          <input type="text" id="username" placeholder="username kiriting" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label>Parol</label>
+          <div class="password-wrap">
+            <input type="password" id="password" placeholder="parol kiriting" autocomplete="current-password" required>
+            <button type="button" class="toggle-pwd" id="togglePwd">&#128065;</button>
+          </div>
+        </div>
+        <div class="login-error" id="loginError"></div>
+        <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Kirish</button>
+      </form>
+      <div style="text-align:center;margin-top:14px">
+        <a href="#" onclick="showForgot()" style="font-size:13px;color:var(--blue);text-decoration:none">
+          🔑 Parolni unutdingizmi?
+        </a>
+      </div>
+      <div class="login-hint">
+        <p><strong>Demo hisoblar:</strong></p>
+        <div class="demo-grid">
+          <button class="demo-btn" onclick="fill('admin','Admin@2024')">Admin<span>Admin@2024</span></button>
+          <button class="demo-btn" onclick="fill('bosh_doc','BoshDoc@2024')">Bosh sh.<span>BoshDoc@2024</span></button>
+          <button class="demo-btn" onclick="fill('gp_karimov','GpKarimov@2024')">Mahalliy sh.<span>GpKarimov@2024</span></button>
+          <button class="demo-btn" onclick="fill('kardio_rahimov','KardioRahimov@2024')">Tor sh.<span>KardioRahimov@2024</span></button>
+          <button class="demo-btn" onclick="fill('qabulxona1','Qabul@2024')">Qabulxona<span>Qabul@2024</span></button>
+          <button class="demo-btn" onclick="fill('bemor_001','Bemor001@2024')">Bemor<span>Bemor001@2024</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAROL TIKLASH -->
+    <div id="forgotSection" style="display:none">
+      <!-- 1-qadam: username -->
+      <div id="step1">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:32px">🔑</div>
+          <h3 style="color:var(--navy);margin:8px 0 4px">Parolni tiklash</h3>
+          <p style="font-size:13px;color:var(--gray-600)">Username kiriting</p>
+        </div>
+        <div class="form-group">
+          <label>Foydalanuvchi nomi *</label>
+          <input type="text" id="forgot-username" placeholder="username">
+        </div>
+        <div class="form-error" id="step1Error"></div>
+        <button class="btn btn-primary btn-full" onclick="checkUsername()" style="margin-top:12px">Davom etish</button>
+        <div style="text-align:center;margin-top:12px">
+          <a href="#" onclick="showLogin()" style="font-size:13px;color:var(--gray-600)">← Loginga qaytish</a>
+        </div>
+      </div>
+
+      <!-- 2-qadam: xavfsizlik savoli -->
+      <div id="step2" style="display:none">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:32px">🛡️</div>
+          <h3 style="color:var(--navy);margin:8px 0 4px">Xavfsizlik savoli</h3>
+        </div>
+        <div class="alert alert-info" id="savolText" style="margin-bottom:16px;padding:12px;border-radius:8px;background:#eff6ff;color:#1e40af;font-size:14px;font-weight:500"></div>
+        <div class="form-group">
+          <label>Javob *</label>
+          <input type="text" id="forgot-javob" placeholder="Javobingizni kiriting">
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label>Yangi parol *</label>
+          <div class="password-wrap">
+            <input type="password" id="forgot-newpass" placeholder="Yangi parol (min 6 belgi)">
+            <button type="button" class="toggle-pwd" onclick="toggleNewPass()">&#128065;</button>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label>Parolni tasdiqlang *</label>
+          <input type="password" id="forgot-confirm" placeholder="Parolni qayta kiriting">
+        </div>
+        <div class="form-error" id="step2Error"></div>
+        <button class="btn btn-success btn-full" onclick="resetPassword()" style="margin-top:12px" id="resetBtn">Parolni yangilash</button>
+        <div style="text-align:center;margin-top:8px">
+          <a href="#" onclick="showStep1()" style="font-size:13px;color:var(--gray-600)">← Ortga</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Agar allaqachon login qilingan bo'lsa
+    if (localStorage.getItem('mrms_token')) {
+      const u = JSON.parse(localStorage.getItem('mrms_user') || '{}');
+      const pages = { admin:'admin.html', bosh_shifokor:'bosh-shifokor.html', mahalliy_shifokor:'mahalliy-shifokor.html', tor_shifokor:'tor-shifokor.html', qabulxona:'qabulxona.html', bemor:'bemor.html' };
+      if (pages[u.role]) window.location.href = pages[u.role];
+    }
+
+    function fill(u, p) {
+      document.getElementById('username').value = u;
+      document.getElementById('password').value = p;
+    }
+
+    document.getElementById('togglePwd').addEventListener('click', () => {
+      const pwd = document.getElementById('password');
+      pwd.type = pwd.type === 'password' ? 'text' : 'password';
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const errEl = document.getElementById('loginError');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      errEl.textContent = '';
+      btn.textContent = 'Kirilmoqda...'; btn.disabled = true;
+      const res = await api.login(username, password);
+      if (res && res.success) {
+        saveSession(res.data.token, res.data.user);
+        window.location.href = res.data.redirect;
+      } else {
+        errEl.textContent = res ? res.message : "Server bilan aloqa yo'q";
+        btn.textContent = 'Kirish'; btn.disabled = false;
+      }
+    });
+
+    // Parol tiklash funksiyalari
+    function showForgot() {
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('forgotSection').style.display = '';
+    }
+    function showLogin() {
+      document.getElementById('forgotSection').style.display = 'none';
+      document.getElementById('loginSection').style.display = '';
+    }
+    function showStep1() {
+      document.getElementById('step2').style.display = 'none';
+      document.getElementById('step1').style.display = '';
+    }
+    function toggleNewPass() {
+      const p = document.getElementById('forgot-newpass');
+      p.type = p.type === 'password' ? 'text' : 'password';
+    }
+
+    async function checkUsername() {
+      const username = document.getElementById('forgot-username').value.trim();
+      if (!username) { document.getElementById('step1Error').textContent = 'Username kiriting'; return; }
+      const res = await api.getSecurityQuestion(username);
+      if (res && res.success) {
+        document.getElementById('savolText').textContent = '❓ ' + res.data.savol;
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = '';
+        document.getElementById('step1Error').textContent = '';
+      } else {
+        document.getElementById('step1Error').textContent = res?.message || 'Foydalanuvchi topilmadi';
+      }
+    }
+
+    async function resetPassword() {
+      const username = document.getElementById('forgot-username').value.trim();
+      const javob    = document.getElementById('forgot-javob').value.trim();
+      const yangiParol = document.getElementById('forgot-newpass').value;
+      const confirm  = document.getElementById('forgot-confirm').value;
+      const errEl    = document.getElementById('step2Error');
+
+      if (!javob || !yangiParol || !confirm) { errEl.textContent = "Barcha maydonlarni to'ldiring"; return; }
+      if (yangiParol !== confirm) { errEl.textContent = "Parollar mos kelmadi"; return; }
+      if (yangiParol.length < 6) { errEl.textContent = "Parol kamida 6 ta belgi bo'lishi kerak"; return; }
+
+      const btn = document.getElementById('resetBtn');
+      btn.disabled = true; btn.textContent = 'Yangilanmoqda...';
+
+      const res = await api.resetPassword(username, javob, yangiParol);
+      btn.disabled = false; btn.textContent = 'Parolni yangilash';
+
+      if (res && res.success) {
+        alert('✅ Parol muvaffaqiyatli yangilandi! Endi yangi parol bilan kiring.');
+        showLogin();
+        document.getElementById('username').value = username;
+        document.getElementById('password').value = '';
+      } else {
+        errEl.textContent = res?.message || 'Xatolik yuz berdi';
+      }
+    }
+  </script>
+</body>
+</html>

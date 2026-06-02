@@ -1,0 +1,9 @@
+{
+  "bemorlar": [
+    {"id":1,"userId":13,"patientId":1,"username":"bemor_001","fullName":"Akbar Toshmatov","createdAt":"2024-01-10"},
+    {"id":2,"userId":14,"patientId":2,"username":"bemor_002","fullName":"Dilnoza Ergasheva","createdAt":"2024-02-05"},
+    {"id":3,"userId":15,"patientId":3,"username":"bemor_003","fullName":"Jasur Mirzayev","createdAt":"2024-02-18"},
+    {"id":4,"userId":16,"patientId":4,"username":"bemor_004","fullName":"Mohira Xolmatova","createdAt":"2024-03-01"},
+    {"id":5,"userId":17,"patientId":5,"username":"bemor_005","fullName":"Ulugbek Nazarov","createdAt":"2024-03-15"}
+  ]
+}

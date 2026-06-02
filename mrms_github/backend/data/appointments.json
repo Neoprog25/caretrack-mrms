@@ -1,0 +1,19 @@
+{
+  "appointments": [
+    {"id":1,"patientId":1,"shifokorId":1,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-02","vaqt":"09:00","sabab":"Yurak nazorati","holati":"Tasdiqlangan","yaratilgan":"2026-05-28","yaratuvchi":"qabulxona"},
+    {"id":2,"patientId":2,"shifokorId":2,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-02","vaqt":"09:30","sabab":"Bosh og'rig'i","holati":"Tasdiqlangan","yaratilgan":"2026-05-28","yaratuvchi":"qabulxona"},
+    {"id":3,"patientId":3,"shifokorId":1,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-02","vaqt":"10:00","sabab":"Nazorat ko'rigi","holati":"Kutilmoqda","yaratilgan":"2026-05-29","yaratuvchi":"bemor"},
+    {"id":4,"patientId":4,"shifokorId":2,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-02","vaqt":"10:30","sabab":"Teri tekshiruvi","holati":"Kutilmoqda","yaratilgan":"2026-05-29","yaratuvchi":"qabulxona"},
+    {"id":5,"patientId":5,"shifokorId":2,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-02","vaqt":"11:00","sabab":"Bel og'rig'i nazorati","holati":"Kutilmoqda","yaratilgan":"2026-05-30","yaratuvchi":"bemor"},
+    {"id":6,"patientId":1,"shifokorId":1,"shifokorTuri":"tor_shifokor","sana":"2026-06-04","vaqt":"14:00","sabab":"Kardiologiya konsultatsiyasi","holati":"Kutilmoqda","yaratilgan":"2026-05-28","yaratuvchi":"qabulxona"},
+    {"id":7,"patientId":11,"shifokorId":2,"shifokorTuri":"tor_shifokor","sana":"2026-06-04","vaqt":"09:00","sabab":"Nevrologiya nazorati","holati":"Tasdiqlangan","yaratilgan":"2026-05-29","yaratuvchi":"qabulxona"},
+    {"id":8,"patientId":6,"shifokorId":1,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-03","vaqt":"09:00","sabab":"Umumiy ko'rik","holati":"Tasdiqlangan","yaratilgan":"2026-05-30","yaratuvchi":"qabulxona"},
+    {"id":9,"patientId":7,"shifokorId":2,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-03","vaqt":"09:30","sabab":"Diabet nazorati","holati":"Tasdiqlangan","yaratilgan":"2026-05-30","yaratuvchi":"qabulxona"},
+    {"id":10,"patientId":8,"shifokorId":1,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-03","vaqt":"10:00","sabab":"Oshqozon tekshiruvi","holati":"Kutilmoqda","yaratilgan":"2026-05-30","yaratuvchi":"bemor"},
+    {"id":11,"patientId":12,"shifokorId":1,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-05","vaqt":"09:00","sabab":"Artrit nazorati","holati":"Kutilmoqda","yaratilgan":"2026-05-30","yaratuvchi":"qabulxona"},
+    {"id":12,"patientId":13,"shifokorId":3,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-05","vaqt":"10:00","sabab":"Yurak tekshiruvi","holati":"Kutilmoqda","yaratilgan":"2026-05-31","yaratuvchi":"qabulxona"},
+    {"id":13,"patientId":4,"shifokorId":3,"shifokorTuri":"tor_shifokor","sana":"2026-06-06","vaqt":"11:00","sabab":"Dermatologiya nazorati","holati":"Tasdiqlangan","yaratilgan":"2026-05-31","yaratuvchi":"qabulxona"},
+    {"id":14,"patientId":5,"shifokorId":4,"shifokorTuri":"tor_shifokor","sana":"2026-06-06","vaqt":"14:00","sabab":"Ortopediya konsultatsiyasi","holati":"Tasdiqlangan","yaratilgan":"2026-05-31","yaratuvchi":"qabulxona"},
+    {"id":15,"patientId":9,"shifokorId":2,"shifokorTuri":"mahalliy_shifokor","sana":"2026-06-07","vaqt":"09:00","sabab":"COPD nazorati","holati":"Kutilmoqda","yaratilgan":"2026-05-31","yaratuvchi":"qabulxona"}
+  ]
+}

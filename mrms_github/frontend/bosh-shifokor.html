@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MRMS — Bosh shifokor paneli</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+<div class="app-layout">
+  <header class="header">
+    <div class="header-brand"><div class="header-brand-icon"><i class="ti ti-heart-plus" style="font-size:18px"></i></div>CareTrack MRMS</div>
+    <div class="header-spacer"></div>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Mavzu o'zgartirish">🌙</button>
+    <div class="header-user">
+      <div class="user-avatar" id="user-avatar">B</div>
+      <div class="user-info"><span id="user-name"></span><span id="user-role"></span></div>
+      <button class="btn-logout" onclick="logout()">Chiqish</button>
+    </div>
+  </header>
+  <aside class="sidebar">
+    <div class="nav-section">Bosh shifokor</div>
+    <a href="#" class="nav-link active" onclick="showTab('dashboard',this)"><span class="nav-icon"><i class="ti ti-layout-dashboard"></i></span>Bosh panel</a>
+    <a href="#" class="nav-link" onclick="showTab('patients',this)"><span class="nav-icon"><i class="ti ti-users"></i></span>Bemorlar</a>
+    <a href="#" class="nav-link" onclick="showTab('diagnoses',this)"><span class="nav-icon"><i class="ti ti-clipboard-heart"></i></span>Tashxislar</a>
+    <a href="#" class="nav-link" onclick="showTab('appointments',this)"><span class="nav-icon"><i class="ti ti-calendar"></i></span>Navbat jadvali</a>
+    <a href="#" class="nav-link" onclick="showTab('referrals',this)"><span class="nav-icon"><i class="ti ti-arrows-transfer-up"></i></span>Yo'naltirishlar</a>
+    <a href="#" class="nav-link" onclick="showTab('profile',this)"><span class="nav-icon"><i class="ti ti-user"></i></span>Mening profilim</a>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard">
+      <div class="page-header">
+        <div><div class="page-title">Bosh panel</div><div class="page-subtitle">Klinika umumiy holati</div></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon blue"><i class="ti ti-users"></i></div><div><div class="stat-value" id="st-bemorlar">—</div><div class="stat-label">Jami bemorlar</div></div></div>
+        <div class="stat-card"><div class="stat-icon green"><i class="ti ti-stethoscope"></i></div><div><div class="stat-value" id="st-shifokorlar">—</div><div class="stat-label">Shifokorlar</div></div></div>
+        <div class="stat-card"><div class="stat-icon orange"><i class="ti ti-clipboard-heart"></i></div><div><div class="stat-value" id="st-tashxislar">—</div><div class="stat-label">Tashxislar</div></div></div>
+        <div class="stat-card"><div class="stat-icon red"><i class="ti ti-alert-triangle"></i></div><div><div class="stat-value" id="st-kritik">—</div><div class="stat-label">Kritik holatlar</div></div></div>
+        <div class="stat-card"><div class="stat-icon purple"><i class="ti ti-arrows-transfer-up"></i></div><div><div class="stat-value" id="st-yonalt">—</div><div class="stat-label">Kutilgan yo'naltirishlar</div></div></div>
+        <div class="stat-card"><div class="stat-icon blue"><i class="ti ti-calendar"></i></div><div><div class="stat-value" id="st-qabul">—</div><div class="stat-label">Bugungi navbatlar</div></div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Mahalliy shifokorlar</span></div>
+          <div id="mahalliy-list" class="card-list-body"><div class="loading"><div class="spinner"></div>Yuklanmoqda...</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Tor shifokorlar</span></div>
+          <div id="tor-list" class="card-list-body"><div class="loading"><div class="spinner"></div>Yuklanmoqda...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BEMORLAR -->
+    <div id="tab-patients" style="display:none">
+      <div class="page-header">
+        <div><div class="page-title">Barcha bemorlar</div><div class="page-subtitle">Ko'rish va boshqarish</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="toolbar">
+            <div class="search-box"><span class="search-icon">&#128269;</span><input type="text" id="pat-search" placeholder="Ism yoki telefon..."></div>
+          </div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Bemor</th><th>Jinsi</th><th>Tug'ilgan</th><th>Shifokor</th><th>Tashxislar</th><th>Amallar</th></tr></thead>
+          <tbody id="patients-table"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- TASHXISLAR -->
+    <div id="tab-diagnoses" style="display:none">
+      <div class="page-header">
+        <div><div class="page-title">Barcha tashxislar</div><div class="page-subtitle">Klinikadagi barcha tashxislar</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="toolbar">
+            <div class="search-box"><span class="search-icon">&#128269;</span><input type="text" id="diag-search" placeholder="ICD kodi yoki tavsif..."></div>
+            <select class="filter-select" id="diag-ogirlik">
+              <option value="">Barcha og'irliklar</option>
+              <option value="Yengil">Yengil</option><option value="O'rtacha">O'rtacha</option>
+              <option value="Og'ir">Og'ir</option><option value="Kritik">Kritik</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ICD</th><th>Tavsif</th><th>Bemor</th><th>Shifokor</th><th>Og'irlik</th><th>Holati</th><th>Sana</th></tr></thead>
+          <tbody id="diagnoses-table"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- NAVBAT JADVALI -->
+    <div id="tab-appointments" style="display:none">
+      <div class="page-header">
+        <div><div class="page-title">Navbat jadvali</div><div class="page-subtitle">Barcha navbatlar</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="toolbar">
+            <input type="date" id="app-sana" class="filter-select">
+            <button class="btn btn-primary btn-sm" onclick="loadAppointments()">Ko'rish</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Sana</th><th>Vaqt</th><th>Bemor</th><th>Shifokor</th><th>Mutaxassislik</th><th>Sabab</th><th>Holati</th></tr></thead>
+          <tbody id="appointments-table"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- YO'NALTIRISHLAR -->
+    <div id="tab-referrals" style="display:none">
+      <div class="page-header">
+        <div><div class="page-title">Yo'naltirishlar</div><div class="page-subtitle">Barcha yo'naltirishlar</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="toolbar">
+            <select class="filter-select" id="ref-holati" onchange="filterReferrals()">
+              <option value="">Barcha holatlar</option>
+              <option value="Kutilmoqda">Kutilmoqda</option>
+              <option value="Tasdiqlangan">Tasdiqlangan</option>
+              <option value="Rad etilgan">Rad etilgan</option>
+            </select>
+          </div>
+        </div>
+        <div id="referrals-list" class="card-list-body"></div>
+      </div>
+    </div>
+
+    <!-- PROFIL -->
+    <div id="tab-profile" style="display:none">
+      <div class="page-header"><div><div class="page-title">Mening profilim</div></div></div>
+      <div id="profile-content"><div class="loading"><div class="spinner"></div>Yuklanmoqda...</div></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- BEMOR PROFIL MODAL -->
+<div class="modal-overlay hidden" id="patientModal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <span class="modal-title">Bemor to'liq profili</span>
+      <button class="modal-close" onclick="closeModal('patientModal')">&times;</button>
+    </div>
+    <div class="modal-body" id="patientContent"></div>
+  </div>
+</div>
+
+<!-- KO'CHIRISH MODAL -->
+<div class="modal-overlay hidden" id="transferModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Bemorni ko'chirish</span>
+      <button class="modal-close" onclick="closeModal('transferModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px" id="transfer-info"></p>
+      <div class="form-group">
+        <label>Yangi mahalliy shifokor *</label>
+        <select id="transfer-shifokor"><option value="">Tanlang</option></select>
+      </div>
+      <div class="form-error" id="transferError"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('transferModal')">Bekor</button>
+      <button class="btn btn-primary" id="transferBtn" onclick="doTransfer()">Ko'chirish</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/bosh-shifokor.js"></script>
+</body>
+</html>

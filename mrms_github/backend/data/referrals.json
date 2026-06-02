@@ -1,0 +1,11 @@
+{
+  "referrals": [
+    {"id":1,"patientId":1,"yuboruvcniShifokorId":1,"yuboruvchiTuri":"mahalliy_shifokor","qabullovchiShifokorId":1,"qabullovchiTuri":"tor_shifokor","sabab":"Yurak kasalligi shubhasi — kardiologiya konsultatsiyasi kerak","holati":"Tasdiqlangan","yuborilganSana":"2024-03-03","qabulSana":"2024-03-05"},
+    {"id":2,"patientId":3,"yuboruvcniShifokorId":1,"yuboruvchiTuri":"mahalliy_shifokor","qabullovchiShifokorId":2,"qabullovchiTuri":"tor_shifokor","sabab":"Bosh og'rig'i va ko'rish buzilishi — nevrologiya tekshiruvi","holati":"Kutilmoqda","yuborilganSana":"2024-05-12","qabulSana":null},
+    {"id":3,"patientId":4,"yuboruvcniShifokorId":2,"yuboruvchiTuri":"mahalliy_shifokor","qabullovchiShifokorId":3,"qabullovchiTuri":"tor_shifokor","sabab":"Teri toshmasi va qichishish — dermatologiya konsultatsiyasi","holati":"Tasdiqlangan","yuborilganSana":"2024-04-10","qabulSana":"2024-04-15"},
+    {"id":4,"patientId":5,"yuboruvcniShifokorId":2,"yuboruvchiTuri":"mahalliy_shifokor","qabullovchiShifokorId":4,"qabullovchiTuri":"tor_shifokor","sabab":"Surunkali bel og'rig'i — ortopediya konsultatsiyasi","holati":"Tasdiqlangan","yuborilganSana":"2024-04-20","qabulSana":"2024-04-25"},
+    {"id":5,"patientId":11,"yuboruvcniShifokorId":2,"yuboruvchiTuri":"mahalliy_shifokor","qabullovchiShifokorId":2,"qabullovchiTuri":"tor_shifokor","sabab":"O'tkir insult belgilari — nevrologiya shoshilinch konsultatsiyasi","holati":"Tasdiqlangan","yuborilganSana":"2024-05-01","qabulSana":"2024-05-01"},
+    {"id":6,"patientId":12,"yuboruvcniShifokorId":1,"yuboruvchiTuri":"mahalliy_shifokor","qabullovchiShifokorId":4,"qabullovchiTuri":"tor_shifokor","sabab":"Bo'g'im og'rig'i — revmatoid artrit shubhasi, ortopediya","holati":"Kutilmoqda","yuborilganSana":"2024-05-05","qabulSana":null},
+    {"id":7,"patientId":7,"yuboruvcniShifokorId":2,"yuboruvchiTuri":"mahalliy_shifokor","qabullovchiShifokorId":1,"qabullovchiTuri":"tor_shifokor","sabab":"Qandli diabet fonida yurak tekshiruvi","holati":"Kutilmoqda","yuborilganSana":"2024-05-15","qabulSana":null}
+  ]
+}
