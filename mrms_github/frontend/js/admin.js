@@ -694,6 +694,17 @@ function openUserModal() {
    'u-tugilganSana','u-manzil']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   document.getElementById('u-role').value = '';
+  // Smena
+  const smenaEl = document.getElementById('u-smena');
+  if (smenaEl) smenaEl.value = 'kunduz';
+  const timeGrp = document.getElementById('u-time-group');
+  if (timeGrp) timeGrp.style.display = 'none';
+  const ishBosh = document.getElementById('u-ish-bosh');
+  if (ishBosh) ishBosh.value = '09:00';
+  const ishTug = document.getElementById('u-ish-tug');
+  if (ishTug) ishTug.value = '17:00';
+  // Qabul kunlari checkboxlar
+  document.querySelectorAll('#u-qabul-kunlar input[type=checkbox]').forEach(cb => cb.checked = false);
   const jinsiEl = document.getElementById('u-jinsi');
   if (jinsiEl) jinsiEl.value = '';
   const qonEl = document.getElementById('u-qonGuruhi');
@@ -704,7 +715,6 @@ function openUserModal() {
   document.getElementById('userError').textContent = '';
   document.getElementById('userModalTitle').textContent = "Foydalanuvchi qo'shish";
 
-  // Bemor uchun shifokor selectini to'ldirish
   const sel = document.getElementById('u-shifokorId');
   if (sel && allDoctors.mahalliy.length) {
     sel.innerHTML = '<option value="">Biriktirmaslik</option>';
@@ -713,6 +723,23 @@ function openUserModal() {
     });
   }
   document.getElementById('userModal').classList.remove('hidden');
+}
+
+function toggleSmenaTimes() {
+  const smena = document.getElementById('u-smena').value;
+  const tg    = document.getElementById('u-time-group');
+  if (smena === 'custom') {
+    tg.style.display = '';
+  } else {
+    tg.style.display = 'none';
+    if (smena === 'kunduz') {
+      document.getElementById('u-ish-bosh').value = '09:00';
+      document.getElementById('u-ish-tug').value  = '17:00';
+    } else {
+      document.getElementById('u-ish-bosh').value = '17:00';
+      document.getElementById('u-ish-tug').value  = '09:00';
+    }
+  }
 }
 
 function toggleDoctorFields() {
@@ -726,6 +753,16 @@ function toggleDoctorFields() {
 async function saveUser() {
   const role = document.getElementById('u-role').value;
   const doctorRoles = ['bosh_shifokor','mahalliy_shifokor','tor_shifokor'];
+
+  // Qabul kunlarini yig'ish
+  const qabulKunlari = [];
+  document.querySelectorAll('#u-qabul-kunlar input[type=checkbox]:checked').forEach(cb => qabulKunlari.push(cb.value));
+
+  // Ish vaqtini aniqlash
+  const smena     = document.getElementById('u-smena')?.value || 'kunduz';
+  const ishBosh   = document.getElementById('u-ish-bosh')?.value || '09:00';
+  const ishTug    = document.getElementById('u-ish-tug')?.value  || '17:00';
+
   const data = {
     fullName:           document.getElementById('u-fullName').value.trim(),
     username:           document.getElementById('u-username').value.trim(),
@@ -737,6 +774,10 @@ async function saveUser() {
     bolim:              document.getElementById('u-bolim')?.value.trim() || '',
     licenseNumber:      document.getElementById('u-licenseNumber')?.value.trim() || '',
     tajriba:            parseInt(document.getElementById('u-tajriba')?.value || 0),
+    ish_smenasi:        smena,
+    ish_boshlanish:     ishBosh,
+    ish_tugash:         ishTug,
+    qabulKunlari,
     tugilganSana:       document.getElementById('u-tugilganSana')?.value || '',
     jinsi:              document.getElementById('u-jinsi')?.value || '',
     qonGuruhi:          document.getElementById('u-qonGuruhi')?.value || '',
@@ -752,6 +793,9 @@ async function saveUser() {
   }
   if (doctorRoles.includes(role) && !data.mutaxassislik) {
     document.getElementById('userError').textContent = "Shifokor uchun mutaxassislik kiritilishi shart"; return;
+  }
+  if (doctorRoles.includes(role) && qabulKunlari.length === 0) {
+    document.getElementById('userError').textContent = "Kamida bitta qabul kunini belgilang"; return;
   }
   if (role === 'bemor' && (!data.tugilganSana || !data.jinsi || !data.phone)) {
     document.getElementById('userError').textContent = "Bemor uchun tug'ilgan sana, jinsi va telefon kiritilishi shart"; return;
