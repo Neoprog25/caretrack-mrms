@@ -8,9 +8,10 @@ const TUSHLIK_TUGASH     = '14:00';
 function vaqtDaqiqa(v) { const [h,m] = v.split(':').map(Number); return h*60+m; }
 
 function slotHolati(sana, vaqt) {
-  const hozir = new Date();
+  // UTC+5 (O'zbekiston vaqti) — Render UTC da ishlaydi
+  const hozir = new Date(Date.now() + 5 * 60 * 60 * 1000);
   const hozirSana = hozir.toISOString().split('T')[0];
-  const hozirVaqt = hozir.getHours() * 60 + hozir.getMinutes();
+  const hozirVaqt = hozir.getUTCHours() * 60 + hozir.getUTCMinutes();
   const tB = vaqtDaqiqa(TUSHLIK_BOSHLANISH), tT = vaqtDaqiqa(TUSHLIK_TUGASH);
   const sD = vaqtDaqiqa(vaqt);
   if (sD >= tB && sD < tT) return 'tushlik';
