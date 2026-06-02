@@ -288,6 +288,31 @@
           <div class="form-group"><label>Bo'lim</label><input type="text" id="u-bolim" placeholder="Bo'lim nomi"></div>
           <div class="form-group"><label>Litsenziya</label><input type="text" id="u-licenseNumber" placeholder="MD-001"></div>
           <div class="form-group"><label>Tajriba (yil)</label><input type="number" id="u-tajriba" placeholder="5" min="0"></div>
+          <div class="form-group"><label>Smena turi *</label>
+            <select id="u-smena" onchange="toggleSmenaTimes()">
+              <option value="kunduz">☀️ Kunduzgi (09:00–17:00)</option>
+              <option value="kecha">🌙 Kechki (17:00–09:00)</option>
+              <option value="custom">⚙️ Boshqa vaqt</option>
+            </select>
+          </div>
+          <div class="form-group" id="u-time-group" style="display:none">
+            <label>Ish vaqti</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="time" id="u-ish-bosh" value="09:00" style="flex:1">
+              <span style="color:var(--gray-600)">–</span>
+              <input type="time" id="u-ish-tug" value="17:00" style="flex:1">
+            </div>
+          </div>
+          <div class="form-group form-full"><label>Qabul kunlari *</label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px" id="u-qabul-kunlar">
+              <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:400"><input type="checkbox" value="Dushanba"> Dushanba</label>
+              <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:400"><input type="checkbox" value="Seshanba"> Seshanba</label>
+              <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:400"><input type="checkbox" value="Chorshanba"> Chorshanba</label>
+              <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:400"><input type="checkbox" value="Payshanba"> Payshanba</label>
+              <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:400"><input type="checkbox" value="Juma"> Juma</label>
+              <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:400"><input type="checkbox" value="Shanba"> Shanba</label>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Bemor uchun qo'shimcha -->
