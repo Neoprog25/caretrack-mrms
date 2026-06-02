@@ -168,6 +168,10 @@ async function createUser(req, res) {
         bolim: body.bolim || 'Umumiy qabul',
         licenseNumber: body.licenseNumber || '',
         tajriba: parseInt(body.tajriba) || 0,
+        ish_smenasi:    body.ish_smenasi    || 'kunduz',
+        ish_boshlanish: body.ish_boshlanish || '09:00',
+        ish_tugash:     body.ish_tugash     || '17:00',
+        qabulKunlari:   body.qabulKunlari   || [],
         biriktirilganBemorlar: [],
         createdAt: new Date().toISOString().split('T')[0]
       };
@@ -188,7 +192,10 @@ async function createUser(req, res) {
         bolim: body.bolim || "Mutaxassislik bo'limi",
         licenseNumber: body.licenseNumber || '',
         tajriba: parseInt(body.tajriba) || 0,
-        qabulKunlari: body.qabulKunlari || [],
+        ish_smenasi:    body.ish_smenasi    || 'kunduz',
+        ish_boshlanish: body.ish_boshlanish || '09:00',
+        ish_tugash:     body.ish_tugash     || '17:00',
+        qabulKunlari:   body.qabulKunlari   || [],
         createdAt: new Date().toISOString().split('T')[0]
       };
       tData.tor_shifokorlar.push(newDoc);
@@ -208,6 +215,10 @@ async function createUser(req, res) {
         bolim: body.bolim || 'Boshqaruv',
         licenseNumber: body.licenseNumber || '',
         tajriba: parseInt(body.tajriba) || 0,
+        ish_smenasi:    body.ish_smenasi    || 'kunduz',
+        ish_boshlanish: body.ish_boshlanish || '09:00',
+        ish_tugash:     body.ish_tugash     || '17:00',
+        qabulKunlari:   body.qabulKunlari   || [],
         createdAt: new Date().toISOString().split('T')[0]
       };
       bData.bosh_shifokorlar.push(newDoc);
