@@ -57,6 +57,7 @@ const api = {
   boshGetProfile:      ()            => request('GET',  '/bosh-shifokor/profile'),
   boshGetPatients:     ()            => request('GET',  '/bosh-shifokor/patients'),
   boshGetPatient:      (id)          => request('GET',  `/bosh-shifokor/patients/${id}`),
+  boshTransfer:        (id, d)       => request('PUT',  `/bosh-shifokor/patients/${id}/transfer`, d),
   boshGetReferrals:    ()            => request('GET',  '/bosh-shifokor/referrals'),
   boshGetDiagnoses:    ()            => request('GET',  '/bosh-shifokor/diagnoses'),
   boshGetApps:         ()            => request('GET',  '/bosh-shifokor/appointments'),
@@ -67,7 +68,7 @@ const api = {
   mahalliyAddDiag:     (d)           => request('POST', '/mahalliy-shifokor/diagnoses', d),
   mahalliyUpdateDiag:  (id, d)       => request('PUT',  `/mahalliy-shifokor/diagnoses/${id}`, d),
   mahalliyCreateRef:   (d)           => request('POST', '/mahalliy-shifokor/referrals', d),
-  mahalliyGetTor:      ()            => request('GET',  '/mahalliy-shifokor/tor-shifokorlar'),
+  mahalliyGetTorlar:   ()            => request('GET',  '/mahalliy-shifokor/tor-shifokorlar'),
   mahalliyGetApps:     ()            => request('GET',  '/mahalliy-shifokor/appointments'),
   mahalliyUpdateApp:   (id, d)       => request('PUT',  `/mahalliy-shifokor/appointments/${id}`, d),
 
