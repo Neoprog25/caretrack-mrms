@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function showTab(name, el) {
-  ['dashboard','patients','diagnoses','appointments','referrals','profile'].forEach(t => {
+  ['dashboard','patients','diagnoses','appointments','referrals','profile','password'].forEach(t => {
     const tab = document.getElementById('tab-' + t);
     if (tab) tab.style.display = t === name ? '' : 'none';
   });
@@ -31,6 +31,22 @@ function showTab(name, el) {
   if (name === 'appointments')                         loadAppointments();
   if (name === 'referrals'    && !allReferrals.length) loadReferrals();
   if (name === 'profile')                              loadProfile();
+}
+
+async function changePassword() {
+  const eskiParol  = document.getElementById('old-pass').value;
+  const yangiParol = document.getElementById('new-pass').value;
+  const confirm    = document.getElementById('confirm-pass').value;
+  const errEl      = document.getElementById('passError');
+  if (!eskiParol || !yangiParol || !confirm) { errEl.textContent = "Barcha maydonlarni to'ldiring"; return; }
+  if (yangiParol !== confirm) { errEl.textContent = "Yangi parollar mos kelmadi"; return; }
+  if (yangiParol.length < 6)  { errEl.textContent = "Parol kamida 6 ta belgi bo'lishi kerak"; return; }
+  errEl.textContent = '';
+  const res = await api.changeMyPassword(eskiParol, yangiParol);
+  if (res?.success) {
+    showToast('Parol muvaffaqiyatli yangilandi!', 'success');
+    ['old-pass','new-pass','confirm-pass'].forEach(id => document.getElementById(id).value = '');
+  } else { errEl.textContent = res?.message || 'Xatolik'; }
 }
 
 async function loadDashboard() {
