@@ -35,12 +35,34 @@ function showTab(name, el) {
       if (l.getAttribute('onclick')?.includes(`'${name}'`)) l.classList.add('active');
     });
   }
-  if (name === 'patients'  && !allPatients.length) loadPatients();
-  if (name === 'navbatlar')  loadNavbatlar();
-  if (name === 'doctors')    loadDoctorsTab();
+  if (name === 'patients'    && !allPatients.length) loadPatients();
+  if (name === 'appointment')                        loadAppointmentTab();
+  if (name === 'navbatlar')                          loadNavbatlar();
+  if (name === 'doctors')                            loadDoctorsTab();
 }
 
-// ─── DASHBOARD ───────────────────────────────────
+// ─── NAVBAT BERISH TAB INIT ───────────────────────
+async function loadAppointmentTab() {
+  // Bemorlarni yuklash
+  if (!allPatients.length) {
+    const res = await api.qabulPatients();
+    if (res?.success) allPatients = res.data;
+  }
+  // Bemor select ni to'ldirish
+  const patSel = document.getElementById('app-patient');
+  if (patSel) {
+    patSel.innerHTML = '<option value="">Bemor tanlang</option>';
+    allPatients.forEach(p => {
+      patSel.innerHTML += `<option value="${p.id}">${p.firstName} ${p.lastName} (${p.phone})</option>`;
+    });
+  }
+  // Shifokorlar ham yuklanmagan bo'lsa
+  if (!allDoctors.mahalliy.length && !allDoctors.tor.length) {
+    await loadDoctors();
+  }
+}
+
+
 async function loadDashboard() {
   const today = new Date().toISOString().split('T')[0];
   const [pRes, aRes] = await Promise.all([api.qabulPatients(), api.qabulGetApps(`?sana=${today}`)]);
