@@ -14,21 +14,16 @@ function vaqtDaqiqa(vaqt) {
 
 // Slot o'tib ketganmi yoki tushlik vaqtimi
 function slotHolati(sana, vaqt) {
-  const hozir = new Date();
+  // UTC+5 (O'zbekiston vaqti)
+  const hozir = new Date(Date.now() + 5 * 60 * 60 * 1000);
   const hozirSana = hozir.toISOString().split('T')[0];
-  const hozirVaqt = hozir.getHours() * 60 + hozir.getMinutes();
-
+  const hozirVaqt = hozir.getUTCHours() * 60 + hozir.getUTCMinutes();
   const tushlikBosh = vaqtDaqiqa(TUSHLIK_BOSHLANISH);
   const tushlikTug  = vaqtDaqiqa(TUSHLIK_TUGASH);
   const slotDaq     = vaqtDaqiqa(vaqt);
-
-  // Tushlik vaqtimi?
   if (slotDaq >= tushlikBosh && slotDaq < tushlikTug) return 'tushlik';
-
-  // O'tib ketganmi?
   if (sana < hozirSana) return 'otgan';
   if (sana === hozirSana && slotDaq <= hozirVaqt) return 'otgan';
-
   return 'bos';
 }
 
