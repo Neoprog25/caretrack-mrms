@@ -197,13 +197,26 @@ async function createAppointment(req, res) {
   } catch(e) { sendError(res, e.message, 500); }
 }
 
-// Shifokor jadvalini ko'rish (band/bo's vaqtlar — vaqt validatsiyasi bilan)
+// Shifokor jadvalini ko'rish — smena va ish vaqtiga qarab
 async function getShifokorSchedule(req, res) {
   const user = authMiddleware(req, res, ROL); if (!user) return;
   try {
     const { shifokorId, shifokorTuri, sana } = getQueryParams(req.url);
     if (!shifokorId || !shifokorTuri || !sana)
       return sendError(res, 'shifokorId, shifokorTuri va sana kerak', 400);
+
+    // Shifokor ma'lumotini olish
+    const mahalliy = readJSON('mahalliy_shifokorlar.json').mahalliy_shifokorlar;
+    const tor      = readJSON('tor_shifokorlar.json').tor_shifokorlar;
+    const doktorlar = shifokorTuri === 'mahalliy_shifokor' ? mahalliy : tor;
+    const doktor    = doktorlar.find(d => d.id === parseInt(shifokorId));
+
+    // Ish vaqtini aniqlash
+    const smena    = doktor?.ish_smenasi    || 'kunduz';
+    const ishBosh  = doktor?.ish_boshlanish || '09:00';
+    const ishTug   = doktor?.ish_tugash     || '17:00';
+    const [boshH]  = ishBosh.split(':').map(Number);
+    const [tugH]   = ishTug.split(':').map(Number);
 
     const { appointments } = readJSON('appointments.json');
     const { patients }     = readJSON('patients.json');
@@ -214,30 +227,75 @@ async function getShifokorSchedule(req, res) {
         a.sana === sana && a.holati !== 'Bekor qilindi'
       )
       .map(a => ({
-        vaqt: a.vaqt, bemor: patients.find(p => p.id === a.patientId) || null,
+        vaqt: a.vaqt,
+        bemor: patients.find(p => p.id === a.patientId) || null,
         sabab: a.sabab, holati: a.holati
       }));
 
     const barcha = [];
-    for (let h = 9; h < 17; h++) {
-      for (const m of ['00', '30']) {
-        const vaqt = `${String(h).padStart(2,'0')}:${m}`;
-        const holat = slotHolati(sana, vaqt);
-        const bandInfo = bandlar.find(b => b.vaqt === vaqt);
-        barcha.push({
-          vaqt,
-          band:    !!bandInfo || holat !== 'bos',
-          tushlik: holat === 'tushlik',
-          otgan:   holat === 'otgan',
-          bemor:   bandInfo?.bemor || null,
-          sabab:   bandInfo?.sabab || null
-        });
+
+    if (smena === 'kecha') {
+      // Kechki smena: 17:00 dan 00:00 gacha + 00:00 dan ishTug gacha
+      // 17:00 – 24:00
+      for (let h = boshH; h < 24; h++) {
+        for (const m of ['00', '30']) {
+          const vaqt = `${String(h).padStart(2,'0')}:${m}`;
+          const bandInfo = bandlar.find(b => b.vaqt === vaqt);
+          // Kechki smena uchun o'tgan vaqt tekshiruvi — keyingi kun bo'lishi mumkin
+          const holat = slotHolatiKecha(sana, vaqt);
+          barcha.push({
+            vaqt, band: !!bandInfo || holat !== 'bos',
+            tushlik: false, otgan: holat === 'otgan',
+            bemor: bandInfo?.bemor || null, sabab: bandInfo?.sabab || null
+          });
+        }
+      }
+      // 00:00 – tugH
+      for (let h = 0; h < tugH; h++) {
+        for (const m of ['00', '30']) {
+          const vaqt = `${String(h).padStart(2,'0')}:${m}`;
+          const bandInfo = bandlar.find(b => b.vaqt === vaqt);
+          barcha.push({
+            vaqt, band: !!bandInfo,
+            tushlik: false, otgan: false,
+            bemor: bandInfo?.bemor || null, sabab: bandInfo?.sabab || null
+          });
+        }
+      }
+    } else {
+      // Kunduzgi smena: ishBosh dan ishTug gacha
+      for (let h = boshH; h < tugH; h++) {
+        for (const m of ['00', '30']) {
+          const vaqt = `${String(h).padStart(2,'0')}:${m}`;
+          const holat    = slotHolati(sana, vaqt);
+          const bandInfo = bandlar.find(b => b.vaqt === vaqt);
+          barcha.push({
+            vaqt,
+            band:    !!bandInfo || holat !== 'bos',
+            tushlik: holat === 'tushlik',
+            otgan:   holat === 'otgan',
+            bemor:   bandInfo?.bemor || null,
+            sabab:   bandInfo?.sabab || null
+          });
+        }
       }
     }
+
     const bos  = barcha.filter(v => !v.band).length;
     const band = barcha.filter(v => v.band && !v.tushlik && !v.otgan).length;
-    sendSuccess(res, { sana, barcha, jami: barcha.length, band, bos });
+    sendSuccess(res, { sana, smena, ishBosh, ishTug, barcha, jami: barcha.length, band, bos });
   } catch(e) { sendError(res, e.message, 500); }
+}
+
+// Kechki smena uchun o'tgan vaqt tekshiruvi
+function slotHolatiKecha(sana, vaqt) {
+  const hozir = new Date(Date.now() + 5 * 60 * 60 * 1000);
+  const hozirSana = hozir.toISOString().split('T')[0];
+  const hozirVaqt = hozir.getUTCHours() * 60 + hozir.getUTCMinutes();
+  const sD = vaqtDaqiqa(vaqt);
+  if (sana < hozirSana) return 'otgan';
+  if (sana === hozirSana && sD <= hozirVaqt) return 'otgan';
+  return 'bos';
 }
 
 // Barcha navbatlar
