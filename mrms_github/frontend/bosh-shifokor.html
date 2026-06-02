@@ -27,6 +27,8 @@
     <a href="#" class="nav-link" onclick="showTab('appointments',this)"><span class="nav-icon"><i class="ti ti-calendar"></i></span>Navbat jadvali</a>
     <a href="#" class="nav-link" onclick="showTab('referrals',this)"><span class="nav-icon"><i class="ti ti-arrows-transfer-up"></i></span>Yo'naltirishlar</a>
     <a href="#" class="nav-link" onclick="showTab('profile',this)"><span class="nav-icon"><i class="ti ti-user"></i></span>Mening profilim</a>
+    <div class="nav-section">Hisob</div>
+    <a href="#" class="nav-link" onclick="showTab('password',this)"><span class="nav-icon"><i class="ti ti-lock"></i></span>Parol o'zgartirish</a>
   </aside>
 
   <main class="main-content">
@@ -140,6 +142,24 @@
     <div id="tab-profile" style="display:none">
       <div class="page-header"><div><div class="page-title">Mening profilim</div></div></div>
       <div id="profile-content"><div class="loading"><div class="spinner"></div>Yuklanmoqda...</div></div>
+    </div>
+
+    <!-- PAROL O'ZGARTIRISH -->
+    <div id="tab-password" style="display:none">
+      <div class="page-header"><div><div class="page-title">Parol o'zgartirish</div></div></div>
+      <div class="card" style="max-width:440px">
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group form-full"><label>Eski parol *</label><input type="password" id="old-pass" placeholder="Hozirgi parol"></div>
+            <div class="form-group form-full"><label>Yangi parol *</label><input type="password" id="new-pass" placeholder="Kamida 6 belgi"></div>
+            <div class="form-group form-full"><label>Tasdiqlash *</label><input type="password" id="confirm-pass" placeholder="Yangi parolni qaytaring"></div>
+          </div>
+          <div class="form-error" id="passError"></div>
+          <div style="margin-top:16px">
+            <button class="btn btn-primary" onclick="changePassword()">&#128274; Parolni yangilash</button>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
